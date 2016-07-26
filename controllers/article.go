@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"jikeblog/models/class"
+	. "jikeblog/models/class"
 	"strconv"
 	"strings"
 )
@@ -51,6 +52,8 @@ func (c *ArticleController) Get() {
 	a := &class.Article{Id: id}
 	a.ReadDB()
 	a.Author.ReadDB()
+
+	a.Replys = Reply{Article: a}.Gets()
 
 	c.Data["article"] = a
 	c.TplName = "article/article.html"

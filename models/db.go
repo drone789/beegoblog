@@ -40,7 +40,7 @@ func init() {
 		log.Fatalln(beego.AppConfig.String("DB::db"))
 	}
 
-	orm.RegisterModel(new(class.User), new(class.Article), new(class.Tag))
+	orm.RegisterModel(new(class.User), new(class.Article), new(class.Tag), new(class.Reply))
 
 	_ = orm.RunSyncdb("default", false, true)
 

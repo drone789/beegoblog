@@ -13,10 +13,12 @@ type Article struct {
 	Content string `orm:"type(text)`
 	Author  *User  `orm:"rel(fk);size(30)"`
 
-	Replys int
-	Views  int
+	NumReplys int
+	NumViews  int
 
 	Tags []*Tag `orm:"rel(m2m)"`
+
+	Replys []*Reply `orm:"-"`
 
 	Time time.Time `orm:"auto_now_add;type(datetime)"`
 
