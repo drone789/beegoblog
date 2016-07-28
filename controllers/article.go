@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"fmt"
-	"jikeblog/models/class"
 	. "jikeblog/models/class"
+	// . "jikeblog/models/class"
 	"strconv"
 	"strings"
 )
@@ -17,18 +17,18 @@ func (c *ArticleController) Archive() {
 
 	errmsg := ""
 
-	a := class.Article{}
+	a := Article{}
 	if len(c.GetString("tag")) > 0 {
-		tag := class.Tag{Name: c.GetString("tag")}.Get()
+		tag := Tag{Name: c.GetString("tag")}.Get()
 		if tag == nil {
 			errmsg += fmt.Sprintf("Tag[%s] is not exist.\n", c.GetString("tag"))
 		} else {
-			a.Tags = []*class.Tag{tag}
+			a.Tags = []*Tag{tag}
 		}
 	}
 
 	if len(c.GetString("author")) > 0 {
-		author := class.User{Id: c.GetString("author")}.Get()
+		author := User{Id: c.GetString("author")}.Get()
 		if author == nil {
 			errmsg += fmt.Sprintf("User[%s] is not exist.\n", c.GetString("author"))
 		} else {
@@ -46,10 +46,9 @@ func (c *ArticleController) Archive() {
 	c.TplName = "article/archive.html"
 
 }
-
 func (c *ArticleController) Get() {
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
-	a := &class.Article{Id: id}
+	a := &Article{Id: id}
 	a.ReadDB()
 	a.Author.ReadDB()
 
@@ -61,7 +60,7 @@ func (c *ArticleController) Get() {
 
 func (c *ArticleController) PageEdit() {
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
-	a := &class.Article{Id: id}
+	a := &Article{Id: id}
 	a.ReadDB()
 	a.Author.ReadDB()
 	c.Data["article"] = a
@@ -70,10 +69,10 @@ func (c *ArticleController) PageEdit() {
 
 func (c *ArticleController) Edit() {
 	c.CheckLogin()
-	u := c.GetSession("user").(class.User)
+	u := c.GetSession("user").(User)
 
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
-	a := &class.Article{Id: id}
+	a := &Article{Id: id}
 	a.ReadDB()
 
 	if u.Id != a.Author.Id {
@@ -81,9 +80,9 @@ func (c *ArticleController) Edit() {
 	}
 
 	strs := strings.Split(c.GetString("tag"), ",")
-	tags := []*class.Tag{}
+	tags := []*Tag{}
 	for _, v := range strs {
-		tags = append(tags, class.Tag{Name: strings.TrimSpace(v)}.GetOrNew())
+		tags = append(tags, Tag{Name: strings.TrimSpace(v)}.GetOrNew())
 	}
 	a.Title = c.GetString("title")
 	a.Content = c.GetString("content")
@@ -104,9 +103,9 @@ func (c *ArticleController) PageNew() {
 func (c *ArticleController) New() {
 	c.CheckLogin()
 
-	u := c.GetSession("user").(class.User)
+	u := c.GetSession("user").(User)
 
-	a := &class.Article{
+	a := &Article{
 		Title:   c.GetString("title"),
 		Content: c.GetString("content"),
 		Author:  &u,
@@ -130,10 +129,10 @@ func (c *ArticleController) New() {
 
 func (c *ArticleController) Del() {
 	c.CheckLogin()
-	u := c.GetSession("user").(class.User)
+	u := c.GetSession("user").(User)
 
 	id, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
-	a := &class.Article{Id: id}
+	a := &Article{Id: id}
 	a.ReadDB()
 
 	if u.Id != a.Author.Id {

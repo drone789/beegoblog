@@ -34,7 +34,22 @@
 			<div>
 				<pre>{{.article.Content}}</pre>
 			</div>
+
+			<div>
+				<!-- {{.article.Replys}} -->
+				{{range .article.Replys}}
+					<div>
+						<p>
+							<a href="/user/{{.Author.Id}}">{{.Author.Nick}}</a>
+							{{.Time}}
+						</p>
+						<pre>{{.Content}}</pre>
+					</div>
+				{{end}}
+			</div>
 		</div>
+
+
 
 		<div class="col-sm-3">
 			<h4>本文标签</h4>

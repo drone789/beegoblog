@@ -13,7 +13,7 @@ type Reply struct {
 	Author  *User     `orm:"rel(fk)"`
 	Time    time.Time `orm:"auto_now_add"`
 
-	Default bool
+	Defunct bool
 }
 
 func (a *Reply) Create() (n int64, err error) {
@@ -24,11 +24,11 @@ func (a *Reply) Create() (n int64, err error) {
 	return
 }
 
-func (a *Reply) Gets() (rets []*Reply) {
+func (a Reply) Gets() (rets []*Reply) {
 	o := orm.NewOrm()
 	qs := o.QueryTable("reply")
 	if a.Article != nil {
-		qs = qs.Filter("article_id", a.Author.Id)
+		qs = qs.Filter("article_id", a.Article.Id)
 	}
 	if a.Author != nil {
 		qs = qs.Filter("author_id", a.Author.Id)
@@ -40,7 +40,7 @@ func (a *Reply) Gets() (rets []*Reply) {
 
 	for k := range rets {
 		rets[k].Article.ReadDB()
-		rets[k].Article.ReadDB()
+		rets[k].Author.ReadDB()
 	}
 
 	return

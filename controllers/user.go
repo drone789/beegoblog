@@ -1,6 +1,6 @@
 package controllers
 
-import "jikeblog/models/class"
+import . "jikeblog/models/class"
 
 type UserController struct {
 	//	beego.Controller
@@ -10,15 +10,16 @@ type UserController struct {
 func (c *UserController) Profile() {
 
 	id := c.Ctx.Input.Param(":id")
-	u := &class.User{Id: id}
+	u := &User{Id: id}
 	u.ReadDB()
 
 	c.Data["u"] = u
 
-	a := &class.Article{Author: u}
-	as := a.Gets()
+	as := Article{Author: u}.Gets()
+	replys := Reply{Author: u}.Gets()
 
 	c.Data["articles"] = as
+	c.Data["replys"] = replys
 
 	c.TplName = "user/profile.html"
 }
